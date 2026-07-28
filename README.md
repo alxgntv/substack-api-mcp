@@ -1,5 +1,9 @@
 # Substack API MCP
 
+<p align="center">
+  <img src="assets/claude-substack.jpg" alt="Claude + Substack" width="720" />
+</p>
+
 Substack does **not** provide a native public API for publishing posts.
 
 But authors who want to draft, publish, and schedule from AI agents (Cursor, Claude, and other MCP hosts) still need a way out. **This is the MCP server to publish to Substack via any agent.**
