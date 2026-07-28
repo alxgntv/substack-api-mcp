@@ -78,11 +78,6 @@ See `mcp.example.json`:
 
 Use absolute paths. Restart the host after config changes.
 
-## Related
-
-- SDK/CLI: https://github.com/alxgntv/substack-api-client
-- MCP docs: https://modelcontextprotocol.io/docs/develop/build-server
-
 ## License
 
 Use at your own risk. Not affiliated with Substack.
