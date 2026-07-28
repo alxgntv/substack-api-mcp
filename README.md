@@ -63,8 +63,6 @@ export SUBSTACK_SID="YOUR_SUBSTACK_SID_VALUE"
 
 Cookies expire. If you get `401/403`, refresh `substack.sid` and try again.
 
-Without `APISUBSTACK_API_KEY`, the process exits immediately (license check against `GET https://rest.apisubstack.com/api/v1/keys/verify`).
-
 ## Run
 
 ```bash
