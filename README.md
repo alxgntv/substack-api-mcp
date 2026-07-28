@@ -4,6 +4,8 @@ Standalone [Model Context Protocol](https://modelcontextprotocol.io/docs/develop
 
 Built with the official Python FastMCP SDK (`mcp[cli]`). Powered by [API Substack](https://apisubstack.com/).
 
+Self-contained: includes its own Substack posting client. No external `substack-api-client` dependency.
+
 > STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
 
 ## Tools
@@ -28,15 +30,6 @@ Built with the official Python FastMCP SDK (`mcp[cli]`). Powered by [API Substac
 cd /path/to/Substack-API-MCP
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e .
-```
-
-Requires access to private dependency `alxgntv/substack-api-client` (GitHub auth / `gh` credentials).
-
-For local SDK development without Git:
-
-```bash
-pip install -e /path/to/Substack-API-Client
 pip install -e .
 ```
 

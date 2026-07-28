@@ -1,8 +1,8 @@
-# ─── Ariadne's Thread [AT-0001] ─────────────────────
-# What: Standalone Substack MCP server project using FastMCP stdio
-# Why: Separate MCP packaging from the Python SDK/CLI client per official MCP server guide
+# ─── Ariadne's Thread [AT-0007] ─────────────────────
+# What: Wire MCP tools to in-package Substack client (no external SDK)
+# Why: Make this repo a standalone Substack MCP product
 # Date: 2026-07-28
-# Related: github.com/alxgntv/substack-api-client, modelcontextprotocol.io/docs/develop/build-server
+# Related: [AT-0006] substack_api_mcp/client.py, [AT-0005] substack_api_mcp/config.py
 # ─────────────────────────────────────────────────────
 
 from __future__ import annotations
@@ -13,8 +13,9 @@ import sys
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
-from substack_api_client import SubstackAPIError, utc_iso
-from substack_api_client.config import build_client
+
+from .client import SubstackAPIError, utc_iso
+from .config import build_client
 
 # STDIO servers must not write to stdout (corrupts JSON-RPC). Log to stderr only.
 logging.basicConfig(
