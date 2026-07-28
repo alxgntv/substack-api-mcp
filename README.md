@@ -46,7 +46,11 @@ pip install -e .
 ## Auth env
 
 1. Sign in at [apisubstack.com](https://apisubstack.com/), start the free trial, generate an `ask_*` API key.
-2. Copy your Substack `substack.sid` cookie.
+2. Copy your Substack `substack.sid` cookie:
+   - Open Chrome and sign in to Substack.
+   - Open DevTools → **Application** → **Cookies**.
+   - Select `https://substack.com` (or your publication host, e.g. `https://yourname.substack.com`).
+   - Find the cookie named `substack.sid` and copy its **Value**.
 3. Export:
 
 ```bash
@@ -56,6 +60,8 @@ export SUBSTACK_SID="YOUR_SUBSTACK_SID_VALUE"
 # optional
 # export SUBSTACK_USER_ID="123456"
 ```
+
+Cookies expire. If you get `401/403`, refresh `substack.sid` and try again.
 
 Without `APISUBSTACK_API_KEY`, the process exits immediately (license check against `GET https://rest.apisubstack.com/api/v1/keys/verify`).
 
