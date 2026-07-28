@@ -1,12 +1,24 @@
 # Substack API MCP
 
-Standalone [Model Context Protocol](https://modelcontextprotocol.io/docs/develop/build-server) server for Substack posts.
+Substack does **not** provide a native public API for publishing posts.
 
-Built with the official Python FastMCP SDK (`mcp[cli]`). Powered by [API Substack](https://apisubstack.com/).
+Authors who want to draft, publish, and schedule from AI agents (Cursor, Claude, and other MCP hosts) were stuck in the browser editor. So we built this MCP server — a posting API for Substack authors, powered by [API Substack](https://apisubstack.com/).
 
-Self-contained Substack posting client. **Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`) from [apisubstack.com](https://apisubstack.com/).**
+Connect your agent. Publish to Substack.
+
+Built with the official Python FastMCP SDK (`mcp[cli]`). Self-contained — includes its own Substack posting client.
+
+**Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`) from [apisubstack.com](https://apisubstack.com/).**
 
 > STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
+
+## Why this exists
+
+| Reality | What we built |
+|---|---|
+| No official Substack write/publish API for authors | A posting MCP so agents can create drafts, publish now, and schedule |
+| Authors live in the browser editor | Authors publish through their agents instead |
+| Session-cookie auth is the practical path today | `substack.sid` + your publication URL, gated by an API Substack key |
 
 ## Tools
 
@@ -81,4 +93,4 @@ Use absolute paths. Restart the host after config changes.
 
 ## License
 
-Use at your own risk. Not affiliated with Substack.
+Use at your own risk. Not affiliated with Substack. Built so authors can publish through their agents when Substack itself does not offer a native publishing API.

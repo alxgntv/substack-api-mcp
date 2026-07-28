@@ -12,7 +12,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "substack-api-mcp"
 version = "0.1.0"
-description = "Standalone MCP server for Substack posts, powered by https://apisubstack.com/"
+description = "MCP server so Substack authors can publish posts through AI agents — Substack has no native publishing API. Powered by https://apisubstack.com/"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
