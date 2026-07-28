@@ -2,7 +2,7 @@
 
 Substack does **not** provide a native public API for publishing posts.
 
-Authors who want to draft, publish, and schedule from AI agents (Cursor, Claude, and other MCP hosts) were stuck in the browser editor. So we built this MCP server — a posting API for Substack authors, powered by [API Substack](https://apisubstack.com/).
+Authors who want to draft, publish, and schedule from AI agents (Cursor, Claude, and other MCP hosts) were stuck in the browser editor. So we built this MCP server — a posting API for Substack authors.
 
 Connect your agent. Publish to Substack.
 
