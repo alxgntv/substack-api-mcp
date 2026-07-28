@@ -6,8 +6,6 @@ But authors who want to draft, publish, and schedule from AI agents (Cursor, Cla
 
 **Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`). Get API key here: [apisubstack.com](https://apisubstack.com/).**
 
-> STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
-
 ## Why this exists
 
 | Reality | What we built |
