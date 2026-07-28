@@ -16,7 +16,7 @@ But authors who want to draft, publish, and schedule from AI agents (Cursor, Cla
 
 ## Examples
 
-- [Alex Ign](https://substack.com/@ignalex) — [ignalex.substack.com](https://ignalex.substack.com/)
+- [ignalex.substack.com](https://ignalex.substack.com/)
 
 ## Tools
 
