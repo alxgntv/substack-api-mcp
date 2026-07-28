@@ -30,8 +30,8 @@ mcp = FastMCP(
     "substack-api",
     instructions=(
         "Substack has no native public API for publishing posts. "
-        "This MCP server exists so authors can draft, publish, and schedule "
-        "Substack posts through their AI agents. "
+        "This is the MCP server to publish to Substack via any agent "
+        "(Cursor, Claude, and other MCP hosts): draft, publish, and schedule. "
         "Requires env APISUBSTACK_API_KEY (ask_* from https://apisubstack.com/), "
         "SUBSTACK_PUBLICATION_URL and SUBSTACK_SID."
     ),
