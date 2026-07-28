@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "substack-api": {
+      "command": "${workspaceFolder}/.venv/bin/substack-api-mcp",
+      "args": [],
+      "env": {
+        "APISUBSTACK_API_KEY": "${env:APISUBSTACK_API_KEY}",
+        "SUBSTACK_PUBLICATION_URL": "${env:SUBSTACK_PUBLICATION_URL}",
+        "SUBSTACK_SID": "${env:SUBSTACK_SID}"
+      }
+    }
+  }
+}
