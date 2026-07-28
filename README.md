@@ -20,6 +20,14 @@ Built with the official Python FastMCP SDK (`mcp[cli]`). Self-contained — incl
 | Authors live in the browser editor | Authors publish through their agents instead |
 | Session-cookie auth is the practical path today | `substack.sid` + your publication URL, gated by an API Substack key |
 
+## Blogs run with this API
+
+Publications that publish on autopilot through this posting API / MCP:
+
+| Author | Substack | Notes |
+|---|---|---|
+| [Alex Ign](https://substack.com/@ignalex) | [ignalex.substack.com](https://ignalex.substack.com/) | Daily startup newsletter — drafted and published via API / agents |
+
 ## Tools
 
 | Tool | Description |
