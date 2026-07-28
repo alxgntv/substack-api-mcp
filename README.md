@@ -8,7 +8,7 @@ Connect your agent. Publish to Substack.
 
 Built with the official Python FastMCP SDK (`mcp[cli]`). Self-contained — includes its own Substack posting client.
 
-**Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`) from [apisubstack.com](https://apisubstack.com/).**
+**Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`). Get API key here: [apisubstack.com](https://apisubstack.com/).**
 
 > STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
 
