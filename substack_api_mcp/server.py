@@ -16,6 +16,7 @@ from mcp.server.fastmcp import FastMCP
 
 from .client import SubstackAPIError, utc_iso
 from .config import build_client
+from .license import ApisubstackLicenseError, require_apisubstack_license
 
 # STDIO servers must not write to stdout (corrupts JSON-RPC). Log to stderr only.
 logging.basicConfig(
@@ -29,7 +30,8 @@ mcp = FastMCP(
     "substack-api",
     instructions=(
         "Unofficial Substack post MCP server powered by https://apisubstack.com/. "
-        "Requires env SUBSTACK_PUBLICATION_URL and SUBSTACK_SID. "
+        "Requires env APISUBSTACK_API_KEY (ask_* from https://apisubstack.com/), "
+        "SUBSTACK_PUBLICATION_URL and SUBSTACK_SID. "
         "Create drafts, publish, schedule, tag, and delete posts on any publication."
     ),
 )
@@ -46,6 +48,9 @@ def _err(exc: Exception) -> str:
     if isinstance(exc, SubstackAPIError):
         body["status_code"] = exc.status_code
         body["payload"] = exc.payload
+    if isinstance(exc, ApisubstackLicenseError):
+        body["code"] = "APISUBSTACK_LICENSE"
+        body["site"] = "https://apisubstack.com/"
     return json.dumps(body, ensure_ascii=False, indent=2, default=str)
 
 
@@ -60,6 +65,7 @@ def _client(
         bool(sid),
         user_id,
     )
+    require_apisubstack_license()
     return build_client(
         publication_url=publication_url,
         sid=sid,
@@ -318,6 +324,17 @@ def get_post_tags(
 
 def main() -> None:
     logger.info("starting Substack API MCP server over stdio")
+    try:
+        license_info = require_apisubstack_license(force=True)
+        logger.info(
+            "APISUBSTACK_API_KEY verified keyPrefix=%s subscriptionStatus=%s",
+            license_info.get("keyPrefix"),
+            license_info.get("subscriptionStatus"),
+        )
+    except ApisubstackLicenseError as exc:
+        logger.error("Refusing to start without valid APISUBSTACK_API_KEY: %s", exc)
+        print(str(exc), file=sys.stderr)
+        raise SystemExit(1) from exc
     mcp.run(transport="stdio")
 
 

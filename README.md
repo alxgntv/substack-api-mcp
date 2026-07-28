@@ -4,7 +4,7 @@ Standalone [Model Context Protocol](https://modelcontextprotocol.io/docs/develop
 
 Built with the official Python FastMCP SDK (`mcp[cli]`). Powered by [API Substack](https://apisubstack.com/).
 
-Self-contained: includes its own Substack posting client. No external `substack-api-client` dependency.
+Self-contained Substack posting client. **Will not start without a valid `APISUBSTACK_API_KEY` (`ask_*`) from [apisubstack.com](https://apisubstack.com/).**
 
 > STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
 
@@ -35,12 +35,19 @@ pip install -e .
 
 ## Auth env
 
+1. Sign in at [apisubstack.com](https://apisubstack.com/), start the free trial, generate an `ask_*` API key.
+2. Copy your Substack `substack.sid` cookie.
+3. Export:
+
 ```bash
+export APISUBSTACK_API_KEY="ask_YOUR_KEY"
 export SUBSTACK_PUBLICATION_URL="https://yourname.substack.com"
 export SUBSTACK_SID="YOUR_SUBSTACK_SID_VALUE"
 # optional
 # export SUBSTACK_USER_ID="123456"
 ```
+
+Without `APISUBSTACK_API_KEY`, the process exits immediately (license check against `GET https://rest.apisubstack.com/api/v1/keys/verify`).
 
 ## Run
 
@@ -61,6 +68,7 @@ See `mcp.example.json`:
       "command": "/ABSOLUTE/PATH/TO/Substack-API-MCP/.venv/bin/substack-api-mcp",
       "args": [],
       "env": {
+        "APISUBSTACK_API_KEY": "ask_YOUR_KEY",
         "SUBSTACK_PUBLICATION_URL": "https://yourname.substack.com",
         "SUBSTACK_SID": "YOUR_SUBSTACK_SID_VALUE"
       }

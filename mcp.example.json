@@ -4,6 +4,7 @@
       "command": "/ABSOLUTE/PATH/TO/Substack-API-MCP/.venv/bin/substack-api-mcp",
       "args": [],
       "env": {
+        "APISUBSTACK_API_KEY": "ask_YOUR_KEY",
         "SUBSTACK_PUBLICATION_URL": "https://yourname.substack.com",
         "SUBSTACK_SID": "YOUR_SUBSTACK_SID_VALUE"
       }
