@@ -2,7 +2,7 @@
 
 Standalone [Model Context Protocol](https://modelcontextprotocol.io/docs/develop/build-server) server for Substack posts.
 
-Built with the official Python FastMCP SDK (`mcp[cli]`) and powered by [`substack-api-client`](https://github.com/alxgntv/substack-api-client).
+Built with the official Python FastMCP SDK (`mcp[cli]`). Powered by [API Substack](https://apisubstack.com/).
 
 > STDIO transport: this server logs to **stderr** only (never stdout), per MCP guidance.
 
