@@ -1,0 +1,27 @@
+# ─── Ariadne's Thread [AT-0004] ─────────────────────
+# What: Package Substack MCP server as standalone installable project
+# Why: Separate MCP host integration from the SDK/CLI client repository
+# Date: 2026-07-28
+# Related: [AT-0001] substack_api_mcp/server.py, github.com/alxgntv/substack-api-client
+# ─────────────────────────────────────────────────────
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "substack-api-mcp"
+version = "0.1.0"
+description = "MCP server for Substack posts, powered by substack-api-client"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp[cli]>=1.2.0",
+  "substack-api-client @ git+https://github.com/alxgntv/substack-api-client.git",
+]
+
+[project.scripts]
+substack-api-mcp = "substack_api_mcp.server:main"
+
+[tool.setuptools.packages.find]
+include = ["substack_api_mcp*"]
