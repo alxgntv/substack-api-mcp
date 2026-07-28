@@ -29,10 +29,11 @@ logger = logging.getLogger("substack_api_mcp")
 mcp = FastMCP(
     "substack-api",
     instructions=(
-        "Unofficial Substack post MCP server powered by https://apisubstack.com/. "
+        "Substack has no native public API for publishing posts. "
+        "This MCP server exists so authors can draft, publish, and schedule "
+        "Substack posts through their AI agents. Powered by https://apisubstack.com/. "
         "Requires env APISUBSTACK_API_KEY (ask_* from https://apisubstack.com/), "
-        "SUBSTACK_PUBLICATION_URL and SUBSTACK_SID. "
-        "Create drafts, publish, schedule, tag, and delete posts on any publication."
+        "SUBSTACK_PUBLICATION_URL and SUBSTACK_SID."
     ),
 )
 
