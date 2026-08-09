@@ -15,6 +15,8 @@ version = "0.1.0"
 description = "MCP server to publish to Substack via any agent — Substack has no native publishing API"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Alex Ign" }]
 dependencies = [
   "mcp[cli]>=1.2.0",
   "requests>=2.31.0",

@@ -29,6 +29,7 @@ But authors who want to draft, publish, and schedule from AI agents (Cursor, Cla
 | `test_connection` | Verify `substack.sid` and return profile |
 | `create_post` | Create draft / publish now / schedule (+ optional tags) |
 | `get_draft` | Fetch draft by id |
+| `pangram_detection` | Pangram AI-text / AI-slop check on a draft |
 | `update_draft` | Update draft fields |
 | `publish_post` | Publish existing draft |
 | `schedule_post` | Schedule existing draft |
@@ -98,5 +99,10 @@ See `mcp.example.json`:
 Use absolute paths. Restart the host after config changes.
 
 ## License
+
+**Attribution-or-Royalty** (source available). See [`LICENSE`](LICENSE) and [`COMMERCIAL_LICENSE.md`](COMMERCIAL_LICENSE.md).
+
+- Non-commercial use: allowed (keep copyright + license notice).
+- Commercial use: either **visible attribution** everywhere the software is used, **or** a paid **royalty / commercial license** via [apisubstack.com](https://apisubstack.com/).
 
 Use at your own risk. Not affiliated with Substack. Built so authors can publish through their agents when Substack itself does not offer a native publishing API.

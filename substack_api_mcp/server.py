@@ -156,6 +156,29 @@ def get_draft(
         return _err(exc)
 
 
+# ─── Ariadne's Thread [AT-0154] ─────────────────────
+# What: MCP tool pangram_detection for AI-slop / Pangram check
+# Why: Expose Substack GET /drafts/{id}/pangram_detection to MCP hosts
+# Date: 2026-08-09
+# Related: [AT-0153] substack_api_mcp/client.py:pangram_detection,
+#          [AT-0151] substack_api_client/client.py:pangram_detection
+# ─────────────────────────────────────────────────────
+@mcp.tool()
+def pangram_detection(
+    draft_id: int,
+    publication_url: str | None = None,
+    sid: str | None = None,
+    user_id: int | None = None,
+) -> str:
+    """Run Substack Pangram AI-text / AI-slop detection on a draft. Returns AI/human fractions, header, details, disclosure."""
+    logger.info("tool.pangram_detection draft_id=%s", draft_id)
+    try:
+        client = _client(publication_url, sid, user_id)
+        return _ok(client.pangram_detection(draft_id))
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
 @mcp.tool()
 def update_draft(
     draft_id: int,

@@ -291,6 +291,39 @@ class SubstackClient:
             raise SubstackAPIError("get_draft failed", payload=result)
         return result
 
+    # ─── Ariadne's Thread [AT-0153] ─────────────────────
+    # What: Add GET /drafts/{id}/pangram_detection (AI / Pangram text check)
+    # Why: Mirror SDK support for Substack editor AI-slop detection in MCP package
+    # Date: 2026-08-09
+    # Related: [AT-0151] substack_api_client/client.py:pangram_detection,
+    #          recordings→/api/v1/drafts/{id}/pangram_detection
+    # ─────────────────────────────────────────────────────
+    def pangram_detection(self, draft_id: int | str) -> dict[str, Any]:
+        """GET /api/v1/drafts/{id}/pangram_detection
+
+        Runs Substack's Pangram AI-text / AI-slop check on the draft body.
+        Returns fractions (ai / ai_assisted / human), header, details, disclosure.
+        """
+        logger.info("pangram_detection: id=%s", draft_id)
+        result = self._request(
+            "GET",
+            self._api_url(f"/drafts/{draft_id}/pangram_detection"),
+            referer=f"{self.publication_url}/publish/post/{draft_id}",
+        )
+        if not isinstance(result, dict):
+            raise SubstackAPIError("pangram_detection failed", payload=result)
+        logger.info(
+            "pangram_detection: ok id=%s type=%s header=%r fraction_ai=%s "
+            "fraction_ai_assisted=%s fraction_human=%s",
+            draft_id,
+            result.get("type"),
+            result.get("header"),
+            result.get("fraction_ai"),
+            result.get("fraction_ai_assisted"),
+            result.get("fraction_human"),
+        )
+        return result
+
     def update_draft(
         self,
         draft_id: int | str,
