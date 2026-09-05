@@ -38,6 +38,8 @@ But authors who want to draft, publish, and schedule from AI agents (Cursor, Cla
 | `create_tag` | Create tag |
 | `set_tags` | Ensure + attach tags |
 | `get_post_tags` | List tags on a post/draft |
+| `create_note` | Create a Substack Note (optional link attachment) |
+| `delete_note` | Delete a Substack Note by id |
 
 ## Install
 

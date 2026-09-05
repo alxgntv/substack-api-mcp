@@ -346,6 +346,68 @@ def get_post_tags(
         return _err(exc)
 
 
+# ─── Ariadne's Thread [AT-0161] ─────────────────────
+# What: MCP tool create_note for Substack Notes (comment/feed)
+# Why: Expose POST /comment/feed (+ optional /comment/attachment) to MCP hosts
+# Date: 2026-09-05
+# Related: [AT-0159] substack_api_client/client.py:create_note
+# ─────────────────────────────────────────────────────
+@mcp.tool()
+def create_note(
+    body: str,
+    attachment_url: str | None = None,
+    tab_id: str = "for-you",
+    surface: str = "permalink",
+    reply_minimum_role: str = "everyone",
+    publication_url: str | None = None,
+    sid: str | None = None,
+    user_id: int | None = None,
+) -> str:
+    """Create a Substack Note. Body is plain text or ProseMirror JSON. Optional attachment_url is a link (captured type=link)."""
+    logger.info(
+        "tool.create_note body_len=%s attachment_url_set=%s tab_id=%s surface=%s",
+        len(body or ""),
+        bool(attachment_url),
+        tab_id,
+        surface,
+    )
+    try:
+        client = _client(publication_url, sid, user_id)
+        return _ok(
+            client.create_note(
+                body=body,
+                attachment_url=attachment_url,
+                tab_id=tab_id,
+                surface=surface,
+                reply_minimum_role=reply_minimum_role,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
+# ─── Ariadne's Thread [AT-0164] ─────────────────────
+# What: MCP tool delete_note for DELETE /comment/{id}
+# Why: Expose note delete next to create_note
+# Date: 2026-09-05
+# Related: [AT-0162] substack_api_client/client.py:delete_note
+# ─────────────────────────────────────────────────────
+@mcp.tool()
+def delete_note(
+    note_id: int,
+    publication_url: str | None = None,
+    sid: str | None = None,
+    user_id: int | None = None,
+) -> str:
+    """Delete a Substack Note by numeric id."""
+    logger.info("tool.delete_note note_id=%s", note_id)
+    try:
+        client = _client(publication_url, sid, user_id)
+        return _ok(client.delete_note(note_id))
+    except Exception as exc:  # noqa: BLE001
+        return _err(exc)
+
+
 def main() -> None:
     logger.info("starting Substack API MCP server over stdio")
     try:
