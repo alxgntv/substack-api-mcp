@@ -4,6 +4,12 @@
 # Date: 2026-07-28
 # Related: [AT-0006] substack_api_mcp/client.py, [AT-0007] substack_api_mcp/server.py
 # ─────────────────────────────────────────────────────
+# ─── Ariadne's Thread [AT-0165] ─────────────────────
+# What: Pin mcp[cli] to 1.x (<2)
+# Why: mcp 2.x removed mcp.server.fastmcp; this server still uses FastMCP
+# Date: 2026-09-05
+# Related: [AT-0007] substack_api_mcp/server.py, official mcp v2 FastMCP migration
+# ─────────────────────────────────────────────────────
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
@@ -18,7 +24,7 @@ requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [{ name = "Alex Ign" }]
 dependencies = [
-  "mcp[cli]>=1.2.0",
+  "mcp[cli]>=1.2.0,<2",
   "requests>=2.31.0",
 ]
 
