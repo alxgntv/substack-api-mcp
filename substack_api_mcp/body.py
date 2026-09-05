@@ -77,3 +77,31 @@ def ensure_draft_body(body: str | dict[str, Any] | None) -> str:
     encoded = json.dumps(raw, ensure_ascii=False, separators=(",", ":"))
     logger.info("ensure_draft_body: encoded_len=%s", len(encoded))
     return encoded
+
+
+# ─── Ariadne's Thread [AT-0158] ─────────────────────
+# What: Reuse ensure_draft_body for Notes bodyJson; add captured schemaVersion attrs
+# Why: Notes POST /comment/feed needs a doc object; paragraph conversion already exists
+# Date: 2026-09-05
+# Related: [AT-0018] substack_api_mcp/body.py:ensure_draft_body,
+#          recordings→POST /api/v1/comment/feed
+# ─────────────────────────────────────────────────────
+def ensure_note_body(body: str | dict[str, Any] | None) -> dict[str, Any]:
+    """Return Notes bodyJson object. Plain text goes through ensure_draft_body()."""
+    logger.info("ensure_note_body: input_type=%s", type(body).__name__)
+    if isinstance(body, dict):
+        raw = dict(body)
+        logger.info("ensure_note_body: accepted dict type=%s", raw.get("type"))
+    else:
+        encoded = ensure_draft_body(body)
+        raw = json.loads(encoded)
+        if not isinstance(raw, dict):
+            raise TypeError(f"ensure_draft_body did not return a JSON object: {type(raw)!r}")
+        logger.info("ensure_note_body: reused ensure_draft_body encoded_len=%s", len(encoded))
+    attrs = raw.get("attrs")
+    merged = dict(attrs) if isinstance(attrs, dict) else {}
+    merged.setdefault("schemaVersion", "v1")
+    merged.setdefault("title", None)
+    raw["attrs"] = merged
+    logger.info("ensure_note_body: attrs=%s", raw.get("attrs"))
+    return raw

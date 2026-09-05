@@ -34,7 +34,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from .body import ensure_draft_body
+from .body import ensure_draft_body, ensure_note_body
 
 logger = logging.getLogger("substack_api_mcp.client")
 
@@ -595,6 +595,152 @@ class SubstackClient:
         )
         logger.info("delete_draft: done id=%s result=%s", draft_id, result)
         return {"status": "deleted", "draft_id": draft_id, "response": result or {}}
+
+    # ─── Ariadne's Thread [AT-0159] ─────────────────────
+    # What: Add Notes create: POST /comment/attachment then POST /comment/feed
+    # Why: Captured Notes composer publishes a feed comment, not a newsletter draft
+    # Date: 2026-09-05
+    # Related: [AT-0158] substack_api_mcp/body.py:ensure_note_body,
+    #          recordings→POST /api/v1/comment/feed
+    # ─────────────────────────────────────────────────────
+    def create_comment_attachment(
+        self,
+        *,
+        url: str,
+        attachment_type: str = "link",
+    ) -> dict[str, Any]:
+        """POST https://substack.com/api/v1/comment/attachment  body: {url, type}"""
+        target = (url or "").strip()
+        kind = (attachment_type or "").strip() or "link"
+        logger.info(
+            "create_comment_attachment: type=%s url=%s",
+            kind,
+            target,
+        )
+        if not target:
+            raise SubstackAPIError("create_comment_attachment failed: url is required")
+        result = self._request(
+            "POST",
+            f"{GLOBAL_API}/comment/attachment",
+            json_body={"url": target, "type": kind},
+            referer="https://substack.com/",
+        )
+        if not isinstance(result, dict) or "id" not in result:
+            raise SubstackAPIError(
+                "create_comment_attachment failed: missing id",
+                payload=result,
+            )
+        logger.info(
+            "create_comment_attachment: ok id=%s type=%s",
+            result.get("id"),
+            result.get("type"),
+        )
+        return result
+
+    def create_note(
+        self,
+        *,
+        body: str | dict[str, Any],
+        attachment_url: str | None = None,
+        attachment_type: str = "link",
+        attachment_ids: list[str] | None = None,
+        tab_id: str = "for-you",
+        surface: str = "permalink",
+        reply_minimum_role: str = "everyone",
+    ) -> dict[str, Any]:
+        """Create a Substack Note via POST /api/v1/comment/feed.
+
+        Optional attachment_url first calls POST /comment/attachment (captured type=link).
+        """
+        resolved_ids: list[str] = [str(item).strip() for item in (attachment_ids or []) if str(item).strip()]
+        logger.info(
+            "create_note: body_type=%s attachment_url_set=%s attachment_ids=%s tab_id=%s surface=%s reply_minimum_role=%s",
+            type(body).__name__,
+            bool((attachment_url or "").strip()),
+            resolved_ids,
+            tab_id,
+            surface,
+            reply_minimum_role,
+        )
+        body_json = ensure_note_body(body)
+        has_text = False
+        for block in body_json.get("content") or []:
+            if not isinstance(block, dict):
+                continue
+            for node in block.get("content") or []:
+                if isinstance(node, dict) and str(node.get("text") or "").strip():
+                    has_text = True
+                    break
+            if has_text:
+                break
+        attach_url = (attachment_url or "").strip()
+        if attach_url:
+            attachment = self.create_comment_attachment(
+                url=attach_url,
+                attachment_type=attachment_type,
+            )
+            attachment_id = str(attachment.get("id") or "").strip()
+            if not attachment_id:
+                raise SubstackAPIError(
+                    "create_note failed: attachment missing id",
+                    payload=attachment,
+                )
+            if attachment_id not in resolved_ids:
+                resolved_ids.append(attachment_id)
+            logger.info("create_note: attached id=%s", attachment_id)
+        if not has_text and not resolved_ids:
+            raise SubstackAPIError("create_note failed: body or attachment_url is required")
+
+        payload: dict[str, Any] = {
+            "bodyJson": body_json,
+            "tabId": tab_id,
+            "surface": surface,
+            "replyMinimumRole": reply_minimum_role,
+        }
+        if resolved_ids:
+            payload["attachmentIds"] = resolved_ids
+        logger.info(
+            "create_note: POST %s/comment/feed keys=%s attachment_count=%s",
+            GLOBAL_API,
+            list(payload.keys()),
+            len(resolved_ids),
+        )
+        result = self._request(
+            "POST",
+            f"{GLOBAL_API}/comment/feed",
+            json_body=payload,
+            referer="https://substack.com/",
+        )
+        if not isinstance(result, dict) or "id" not in result:
+            raise SubstackAPIError("create_note failed: missing id", payload=result)
+        logger.info(
+            "create_note: ok id=%s type=%s status=%s body=%r attachments=%s",
+            result.get("id"),
+            result.get("type"),
+            result.get("status"),
+            result.get("body"),
+            len(result.get("attachments") or []) if isinstance(result.get("attachments"), list) else 0,
+        )
+        return result
+
+    # ─── Ariadne's Thread [AT-0162] ─────────────────────
+    # What: Add DELETE /comment/{id} for Notes (same GLOBAL_API as create_note)
+    # Why: Notes are feed comments; reuse _request like delete_draft
+    # Date: 2026-09-05
+    # Related: [AT-0159] substack_api_mcp/client.py:create_note,
+    #          [AT-0023] substack_api_mcp/client.py:delete_draft
+    # ─────────────────────────────────────────────────────
+    def delete_note(self, note_id: int | str) -> dict[str, Any]:
+        """DELETE https://substack.com/api/v1/comment/{id}"""
+        logger.info("delete_note: id=%s", note_id)
+        result = self._request(
+            "DELETE",
+            f"{GLOBAL_API}/comment/{note_id}",
+            referer="https://substack.com/",
+            allow_empty=True,
+        )
+        logger.info("delete_note: done id=%s result=%s", note_id, result)
+        return {"status": "deleted", "note_id": note_id, "response": result or {}}
 
     def create_post(
         self,
